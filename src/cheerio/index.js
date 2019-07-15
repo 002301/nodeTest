@@ -1,4 +1,13 @@
 'use strict'
+/*
+  此项目使用node组件写的一个简单爬虫
+   https ：  获取地址内容
+   iconv-lite ： 解析获取的内容
+   cheerio ： node框架的Jquery,用于提取内容
+   fs：把获取的内容写入文件
+*/
+
+
 let cheerio = require('cheerio');
 let http = require('https');
 let iconv = require('iconv-lite');
@@ -8,20 +17,19 @@ let url ='https://www.ygdy8.net/html/gndy/dyzz/index.html';
 let urls=[];
 http.get(url,(res)=>{
     
-    let chunks =[];
+    let chunks =[]; //存储获取内容列表
     res.on('data',function(chunk){
         chunks.push(chunk);
         // console.log(chunks);
     });
-    
+    //获取页面内容
     res.on('end',function (res) {
-        // const { statusCode } = res;
-        // const contentType = res.headers['content-type'];
-        // console.log('end:'+statusCode,contentType);
         let titles =[];
+        // 解析成gb2313格式
         let html = iconv.decode(Buffer.concat(chunks),'gb2312');
         let $ = cheerio.load(html,{decodeEntities:false});
         console.log(chunks);
+        //获取页面内容
         $('.co_content8 a').each(function(idx,element){
             // console.log($(element))
             let $ele = $(element);
